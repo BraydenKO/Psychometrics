@@ -10,10 +10,11 @@ labels.py:
   
 fix_csv.py:
     
-    The dataset when originally downloaded has all of the labels and data in one column. This script splits up each answer and question into their own cell (as they should be!).
-     Note: As of now, this script will take a while to run.
+    The dataset when originally downloaded has all of the labels and data in one column.
+    This script splits up each answer and question into their own cell (as they should be!).
+        Note: As of now, this script will take a while to run.
      
 gender.py:
     
-    Analyzes and compares men and women's average respond to each labelled question.
+    Analyzes and compares men's and women's average response to each labelled question.
     One might find that women, on average, score 0.18 higher in sensitivity than man.
