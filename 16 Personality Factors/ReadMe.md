@@ -12,7 +12,7 @@ fix_csv.py:
     
     The dataset when originally downloaded has all of the labels and data in one column.
     This script splits up each answer and question into their own cell (as they should be!).
-        Note: As of now, this script will take a while to run.
+        Note: As of now, this script will take a while (20 min?) to run.
      
 gender.py:
     
