@@ -18,3 +18,8 @@ gender.py:
     
     Analyzes and compares men's and women's average response to each labelled question.
     One might find that women, on average, score 0.18 higher in sensitivity than man.
+
+country.py:
+
+    Graphs traits based on countries with the top most responses. Then in the terminal is printed
+    the greatest difference between graphs.
