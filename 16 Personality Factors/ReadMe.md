@@ -17,7 +17,7 @@ fix_csv.py:
 gender.py:
     
     Analyzes and compares men's and women's average response to each labelled question.
-    One might find that women, on average, score 0.18 higher in sensitivity than man.
+    One might find that women, on average, score 0.18 higher in sensitivity than man, for example.
 
 country.py:
 
