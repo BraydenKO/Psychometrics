@@ -1,4 +1,3 @@
-from itertools import count
 from reader import df, pd
 from labels import factors
 import matplotlib.pyplot as plt

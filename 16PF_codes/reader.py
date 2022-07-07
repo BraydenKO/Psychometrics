@@ -1,3 +1,3 @@
 import pandas as pd
-path = (r"Docs\16PF/data.csv")
+path = (r"data/16pf.csv")
 df = pd.read_csv(path, sep='\t')
