@@ -23,7 +23,7 @@ def frequency(df,gender,factor):
 
   return y_values
 
-def fit(x, y, gender):
+def fit(x, y):
   area = sum([i*width for i in y])
 
   data = []
@@ -43,13 +43,13 @@ def run(factor):
 
   women = frequency(df,2,factor)
   plt.plot(x_values, women, 'k-')
-  q, p, m = fit(x_values, women, 2)
+  q, p, m = fit(x_values, women)
   plt.plot(q, p, "g", linewidth = "3", alpha = 0.5)
   plt.axvline(x = m, ymax = max(p)/plt.ylim()[1], color = "g", alpha = 0.1)
 
   men = frequency(df,1,factor)
   plt.plot(x_values, men, 'b-')
-  q, p, m = fit(x_values, men, 1)
+  q, p, m = fit(x_values, men)
   plt.plot(q, p, "r", linewidth = "3", alpha = 0.5)
   plt.axvline(x = m, ymax = max(p)/plt.ylim()[1], color = "r", alpha = 0.1)
 
