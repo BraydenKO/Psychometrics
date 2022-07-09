@@ -1,4 +1,4 @@
-from reader import df, pd
+from reader import df
 '''
 Some questions are have flipped answers:
 For some questions, a 5 means high in that factor
@@ -14,16 +14,14 @@ def flip_answer(answer, middle):
 def fix_flips(df, save = True):
     from labels import flips
 
-    # an item in flips looks like (A, [8,10])
+    # an item in flips looks like ("EXT", [1,1,0,0...])
     for key, value in flips.items():
-        # go through the flipped columns (inclusive)
-        for q in range(value[0],value[1]+1):
-            # flip all values of that column
-            df[f"{key}{q}"] = flip_answer(df[f"{key}{q}"], 3)
+        for idx, i in enumerate(value):
+          if i == 0:
+            df[f"{key}_{idx+1}"] = flip_answer(df[f"{key}_{idx+1}"], 3)
 
     # Save the fixed file
     # usually you want this to run, hence by default it does.
     if save:
-        df.to_csv(r"1_Mentorship\data\16pf_fix.csv", sep = "\t", index = False)
+        df.to_csv(r"1_Mentorship\data\Big5_fix.csv", sep = "\t", index = False)
 
-fix_flips(df)

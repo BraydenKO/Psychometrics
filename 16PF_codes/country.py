@@ -17,15 +17,27 @@ countries = ["US", "GB", "IN", "CA", "AU", "PH", "SG", "MY"]
 
 pd.set_option('display.max_rows', None)
 
-# Probably inefficient, might fix later
+# Given a country return a list of averages
+# where each average is that country's average
+# score in that factor
 def country_avg(country):
+  # Get only the users of that country
   users = df[df["country"] == country]
 
   averages = []
-  factor_sum = 0
-  count = 0
-  label = 0
 
+  # counts the average of each column
+  factor_sum = 0
+
+  # counts the number of columns 
+  # for that factor
+  count = 0
+
+  # records which factor you're
+  # in, which will be a letter
+  # corresponding to a factor
+  label = 0
+ 
   for col in df.columns:
         if col == "age": # Stoping point
             averages.append(factor_sum/count)
@@ -33,6 +45,8 @@ def country_avg(country):
         
         # If the current label isn't the old label
         # You're on a new set
+        # Since you're on a new set, add the average score to 
+        # {averages} a reset {factor_sum} and {count}
         if col[0] != label and label != 0:
             averages.append(factor_sum/count)
             factor_sum = 0
@@ -46,8 +60,7 @@ def country_avg(country):
 
   return averages
 
-fig, ax = plt.subplots(8)
-
+# Labels each bar with their average value
 def autolabel(bars, ax_idx):
   for p in bars:
    height = round(p.get_height(), 3)
@@ -57,17 +70,21 @@ def autolabel(bars, ax_idx):
       textcoords="offset points",
       ha='center', va='bottom')
 
+# 8 plots for the 8 countries
+fig, ax = plt.subplots(8)
 
 x_labels = factors.keys()
 colors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "gray"]
 
 all_scores = np.array([country_avg(country) for country in countries])
+# Max value in each factor
 max_val = all_scores.max(axis=0, keepdims=True)[0]
+# Min value in each factor
 min_val = all_scores.min(axis=0, keepdims=True)[0]
 diff = list(max_val - min_val)
 print({list(x_labels)[i]: diff[i] for i in range(16)})
 
-
+# Label the country
 for idx, country in enumerate(countries):
   scores = all_scores[idx]
   pps = ax[idx].bar(x_labels, scores, color = colors[idx])

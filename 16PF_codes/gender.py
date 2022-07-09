@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 
 pd.set_option('display.max_rows', None)
 
+# For a given gender, go through all of the
+# factors and return average in that factor.
+# Refer to country.py for more comments since
+# it has a similar structure.
 def sex_avg(gender):
     users = df[df["gender"] == gender]
     averages = []
@@ -51,6 +55,7 @@ plt.title("Women's average score")
 # plt.ylabel("avg score")
 # plt.title("Other's average score")
 
+# Plots the difference between men and women
 plt.subplot(3,1,3)
 plt.bar(factors.keys(), [women[i] - men[i] for i in range(16)], color = "green")
 plt.xlabel("factors")
