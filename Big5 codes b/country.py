@@ -5,19 +5,19 @@ from labels import factors, titles
 import numpy as np
 '''
 Countries to look at:
-US: United States (546,403)
-GB: United Kingdom (66,596)
-CA: Canada (61,849)
-AU: Australia (50,030)
-PH: Phillipines (19,847)
-IN: India (17,491)
-DE: Germany (14,095)
-MY: Malaysia (11,355)
+US: United States (8,753)
+GB: United Kingdom (1,531)
+IN: India (1,464)
+PH: Phillipines (649)
+IT: Italy (277)
+PK: Pakistan (222)
+DE: Germany (191)
+MY: Malaysia
 '''
-countries = ["US", "GB", "CA", "AU", "PH", "IN", "DE", "MY"]
+countries = ["US", "GB", "IN", "PH", "IT", "PK", "DE", "MY"]
 
 def top_countries(df):
-  c = Counter(df.loc[df["country"] != "NONE", "country"])
+  c = Counter(df.loc[df["country"] != "(nu", "country"])
   top = c.most_common(10)
   print(top)
 
