@@ -20,6 +20,8 @@ def frequency(df,gender,factor):
   # Gets the properly gendered users
   # And looks at the correct columns
   df = df.iloc[:,columns[0]:columns[1]][df["gender"] == gender]
+  for col in df.columns:
+    df = df[df[col].isin([1,2,3,4,5])]
 
   for i in range(len(df)):
     # for each user, get their summed score for this factor

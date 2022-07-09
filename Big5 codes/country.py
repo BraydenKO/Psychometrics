@@ -1,25 +1,26 @@
-from reader import df, pd
-from labels import factors
 import matplotlib.pyplot as plt
+from reader import df
+from collections import Counter
+from labels import factors, titles
 import numpy as np
 '''
 Countries to look at:
-US: United States (23,988)
-GB: United Kingdom (5,056)
-IN: India (3,259)
-CA: Canada (2,647)
-AU: Australia (2,539)
-PH: Phillipines (2,069)
-SG: Singapore (466)
-MY: Malaysia (405)
+US: United States (546,403)
+GB: United Kingdom (66,596)
+CA: Canada (61,849)
+AU: Australia (50,030)
+PH: Phillipines (19,847)
+IN: India (17,491)
+DE: Germany (14,095)
+MY: Malasia (11,355)
 '''
-countries = ["US", "GB", "IN", "CA", "AU", "PH", "SG", "MY"]
+countries = ["US", "GB", "CA", "AU", "PH", "IN", "DE", "MY"]
 
-pd.set_option('display.max_rows', None)
+def top_countries(df):
+  c = Counter(df.loc[df["country"] != "NONE", "country"])
+  top = c.most_common(10)
+  print(top)
 
-# Given a country return a list of averages
-# where each average is that country's average
-# score in that factor
 def country_avg(country):
   # Get only the users of that country
   users = df[df["country"] == country]
@@ -32,32 +33,18 @@ def country_avg(country):
   # counts the number of columns 
   # for that factor
   count = 0
-
-  # records which factor you're
-  # in, which will be a letter
-  # corresponding to a factor
-  label = 0
  
-  for col in df.columns:
-        if col == "age": # Stoping point
-            averages.append(factor_sum/count)
-            break
-        
-        # If the current label isn't the old label
-        # You're on a new set
-        # Since you're on a new set, add the average score to 
-        # {averages} a reset {factor_sum} and {count}
-        if col[0] != label and label != 0:
-            averages.append(factor_sum/count)
-            factor_sum = 0
-            count = 0
-
-        label = col[0]
-        count += 1
-
-        avg = users[users[col].isin([1,2,3,4,5])][col].mean()
-        factor_sum += avg
-
+  for cols in factors.values():
+    for col in range(cols[0], cols[1]+1):
+      avg = users[users.iloc[:,col].isin([1,2,3,4,5])].iloc[:,col].mean()
+      
+      factor_sum += avg
+      count += 1
+    
+    averages.append(factor_sum/count)
+    factor_sum = 0
+    count = 0
+  
   return averages
 
 # Labels each bar with their average value
@@ -73,7 +60,7 @@ def autolabel(bars, ax_idx):
 # 8 plots for the 8 countries
 fig, ax = plt.subplots(8)
 
-x_labels = factors.keys()
+x_labels = titles.values()
 colors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "gray"]
 
 all_scores = np.array([country_avg(country) for country in countries])
@@ -82,7 +69,7 @@ max_val = all_scores.max(axis=0, keepdims=True)[0]
 # Min value in each factor
 min_val = all_scores.min(axis=0, keepdims=True)[0]
 diff = list(max_val - min_val)
-print({list(x_labels)[i]: diff[i] for i in range(16)})
+print({list(x_labels)[i]: diff[i] for i in range(5)})
 
 # Label the country
 for idx, country in enumerate(countries):
@@ -91,6 +78,5 @@ for idx, country in enumerate(countries):
   ax[idx].set_xlabel(country)
   autolabel(pps, idx)
 
-
-plt.subplots_adjust(hspace = 1)
+plt.subplots_adjust(hspace = 1, top = 0.95, bottom = 0.05)
 plt.show()

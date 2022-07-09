@@ -29,7 +29,7 @@ def sex_avg(gender):
         label = col[0]
         count += 1
 
-        avg = users[users[col] != 0][col].mean()
+        avg = users[users[col].isin([1,2,3,4,5])][col].mean()
         factor_sum += avg
 
     return averages
