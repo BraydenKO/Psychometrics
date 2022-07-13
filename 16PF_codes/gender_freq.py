@@ -77,7 +77,7 @@ def run(factor):
   # plot the normal distribution
   plt.plot(q, p, "r", linewidth = "3", alpha = 0.5, label = "women")
   # plot the vertical line representing the mean
-  plt.axvline(x = m, ymax = max(p)/plt.ylim()[1], color = "r", alpha = 0.5, label = "women mean")
+  plt.axvline(x = m, ymax = max(p)/plt.ylim()[1], color = "r", alpha = 0.5, label = f"women mean = {round(m,3)}")
   # adds the standard deviation to the legend
   plt.axvline(x = m+std, ymax = 0, color = "tab:pink", alpha = 0.5, label =f"women std={round(std,3)}")
 
@@ -95,7 +95,7 @@ def run(factor):
   men = frequency(df,1,factor)
   q, p, m, data, std = fit(x_values, men)
   plt.plot(q, p, "b", linewidth = "3", alpha = 0.5, label = "men")
-  plt.axvline(x = m, ymax = max(p)/plt.ylim()[1], color = "b", alpha = 0.5, label = "men mean")
+  plt.axvline(x = m, ymax = max(p)/plt.ylim()[1], color = "b", alpha = 0.5, label = f"men mean = {round(m,3)}")
   plt.axvline(x = m+std, ymax = 0, color = "c", alpha = 0.5, label =f"men std={round(std,3)}")
 
   area = sum([i*width for i in men])
@@ -107,7 +107,7 @@ def run(factor):
 
   # Tidying up the plot with titles, legend, and size
   plt.title(factor)
-  plt.xlabel("frequency channels")
+  plt.xlabel(f"frequency channels (width = {width})")
   plt.ylabel("amount of respondants")
   plt.legend(loc="upper left")
   plt.get_current_fig_manager().window.state('zoomed')
@@ -146,7 +146,7 @@ def run_std_diff():
   
   print(f"{std_dict[max(std_diff)]} : {max(std_diff)}")
 
-#for factor in factors:
-#  run(factor)
+for factor in factors:
+ run(factor)
 
 run("sensitivity")

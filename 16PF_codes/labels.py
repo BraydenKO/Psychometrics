@@ -1,21 +1,26 @@
-factors ={
-    "Warmth":[0,9],
-    "Reasoning":[10,22],
-    "Emotional Stability":[23,32],
-    "Dominance":[33,42],
-    "Liveliness":[43,52],
-    "Rule Consciousness":[53,62],
-    "Social Boldess":[63,72],
-    "Sensitivity":[73,82],
-    "Vigilance":[83,92],
-    "Abstractedness":[93,102],
-    "Privateness":[103,112],
-    "Apprehension":[113,112],
-    "Openness To Change":[123,132],
-    "Self Reliance":[133,142],
-    "Perfectionism":[143,152],
-    "Tension":[153,162]
-}
+from reader import df
+def get_columns(factor):
+    indeces = []
+    for key,value in titles.items():
+        if value == factor:
+            abbr = key
+            break
+    else:
+        raise Exception(f"Factor {factor} not found in titles")
+
+    for idx,col in enumerate(df.columns):
+        if col == abbr+"1":
+            indeces.append(idx)
+            break
+    else:
+        raise Exception(f"Column {abbr}1 not found in df.columns")
+
+    for idx,col in enumerate(df.columns[idx+1:]):
+        if col[:len(abbr)] != abbr:
+            indeces.append(idx+indeces[0])
+            return indeces
+    indeces.append(len(df.columns)-1)
+    return indeces
 
 titles = {
     'A': 'Warmth',
@@ -36,6 +41,24 @@ titles = {
     'P': 'Tension'
 }
 
+factors ={
+    "Warmth":get_columns("Warmth"),
+    "Reasoning":get_columns("Reasoning"),
+    "Emotional Stability":get_columns("Emotional Stability"),
+    "Dominance":get_columns("Dominance"),
+    "Liveliness":get_columns("Liveliness"),
+    "Dutifulness":get_columns("Dutifulness"),
+    "Social Assertiveness":get_columns("Social Assertiveness"),
+    "Sensitivity":get_columns("Sensitivity"),
+    "Vigilance":get_columns("Vigilance"),
+    "Abstractedness":get_columns("Abstractedness"),
+    "Privateness":get_columns("Privateness"),
+    "Apprehension":get_columns("Apprehension"),
+    "Openmindedness":get_columns("Openmindedness"),
+    "Independance":get_columns("Independance"),
+    "Perfectionism":get_columns("Perfectionism"),
+    "Tension":get_columns("Tension")
+}
 # When fixing the csv, this is used to flip
 # responses to flipped questions
 flips = {

@@ -69,7 +69,7 @@ max_val = all_scores.max(axis=0, keepdims=True)[0]
 # Min value in each factor
 min_val = all_scores.min(axis=0, keepdims=True)[0]
 diff = list(max_val - min_val)
-print({list(x_labels)[i]: diff[i] for i in range(5)})
+print({list(x_labels)[i]: diff[i] for i in range(len(x_labels))})
 
 # Label the country
 for idx, country in enumerate(countries):
