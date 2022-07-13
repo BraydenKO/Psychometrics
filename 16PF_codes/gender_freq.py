@@ -13,10 +13,10 @@ x_values = range(width,51,width)
 # Gets the frequency for scores in each channel
 # for a given gender and factor
 def frequency(df,gender,factor):
-
+  columns = factors[factor]
+  x_values = range(width, width*(columns[1] - columns[0] + 1)+1, width)
   y_values = [0 for i in range(len(x_values))]
 
-  columns = factors[factor]
   # Gets the properly gendered users
   # And looks at the correct columns
   df = df.iloc[:,columns[0]:columns[1]][df["gender"] == gender]
@@ -32,7 +32,7 @@ def frequency(df,gender,factor):
         y_values[idx] += 1
         break
 
-  return y_values
+  return y_values, x_values
 
 # Fits the data to a normal distribution and return
 # relevant data
@@ -47,8 +47,7 @@ def fit(x, y):
 
   mean, std = norm.fit(data)
 
-  print(f"mean: {mean}, std: {std}")
-  print()
+  print(f"mean: {mean}, std: {std}", end =" ")
 
   q = np.linspace(width, 50, 100)
   p = norm.pdf(q, mean, std)
@@ -71,7 +70,7 @@ def run(factor):
   factor = factor.title()
 
   # get the frequency data of women
-  women = frequency(df,2,factor)
+  women, x_values = frequency(df,2,factor)
   # get the normal distribution (q,p), re-formatted data, and standard deviation
   q, p, m, data, std = fit(x_values, women)
   # plot the normal distribution
@@ -90,9 +89,10 @@ def run(factor):
   plt.plot(x_values, women, 'm', label = "women")
   med = median(data)
   # plot the vertical line representing the median (also will be the highest point on the collected data on women plot)
-  plt.axvline(x = med, ymax = get_height(x_values,women,med)/plt.ylim()[1], color = "m", alpha = 0.1, label = "women median")
+  plt.axvline(x = med, ymax = get_height(x_values,women,med)/plt.ylim()[1], color = "m", alpha = 0.1, label = f"women median = {int(med-width)}-{int(med)}")
+  print(f"Skew: {3*(m-med)/std}")
 
-  men = frequency(df,1,factor)
+  men, x_values = frequency(df,1,factor)
   q, p, m, data, std = fit(x_values, men)
   plt.plot(q, p, "b", linewidth = "3", alpha = 0.5, label = "men")
   plt.axvline(x = m, ymax = max(p)/plt.ylim()[1], color = "b", alpha = 0.5, label = f"men mean = {round(m,3)}")
@@ -103,7 +103,8 @@ def run(factor):
 
   plt.plot(x_values, men, 'g', label = "men")
   med = median(data)
-  plt.axvline(x = med, ymax = get_height(x_values,men,med)/plt.ylim()[1], color = "g", alpha = 0.1, label = "men median")
+  plt.axvline(x = med, ymax = get_height(x_values,men,med)/plt.ylim()[1], color = "g", alpha = 0.1, label = f"men median = {int(med-width)}-{int(med)}")
+  print(f"Skew: {3*(m-med)/std}")
 
   # Tidying up the plot with titles, legend, and size
   plt.title(factor)
