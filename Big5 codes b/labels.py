@@ -48,3 +48,20 @@ flips = {
   "C" : [1,0,1,0,1,0,1,0,1,1],
   "O" : [1,0,1,0,1,0,1,1,1,1]
 }
+
+# Used in race.py
+race_label = {
+  1  : "Mixed",
+  2  : "Arctic",
+  3  : "Caucasian (European)",
+  4  : "Caucasian (Indian)",
+  5  : "Caucasian (Middle East)",
+  6  : "Caucasian (North African, Other)",
+  7  : "Indigenous Australian",
+  8  : "Native American",
+  9  : "North East Asian",
+  10 : "Pacific",
+  11 : "South East Asian",
+  12 : "West African",
+  13 : "Other"
+}

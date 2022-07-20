@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 from reader import df
-from collections import Counter
 from labels import factors, titles
 import numpy as np
 '''
@@ -17,6 +16,7 @@ MY: Malaysia
 countries = ["US", "GB", "IN", "PH", "IT", "PK", "DE", "MY"]
 
 def top_countries(df):
+  from collections import Counter
   c = Counter(df.loc[df["country"] != "(nu", "country"])
   top = c.most_common(10)
   print(top)
