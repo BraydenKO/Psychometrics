@@ -8,13 +8,12 @@ from statistics import median
 # Creates the x values from 0 to 50
 # with frequency channel width of {width} 
 width = 5
-x_values = range(width,51,width)
 
 # Gets the frequency for scores in each channel
 # for a given gender and factor
 def frequency(df,gender,factor):
   columns = factors[factor]
-  x_values = range(width, width*(columns[1] - columns[0] + 1)+1, width)
+  x_values = range(width+(columns[1] - columns[0] + 1), width*(columns[1] - columns[0] + 1)+1, width)
   y_values = [0 for i in range(len(x_values))]
 
   # Gets the properly gendered users
