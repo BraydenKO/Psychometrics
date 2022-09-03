@@ -1,3 +1,7 @@
+'''
+Plots the average for each factors for the given countries
+'''
+
 from reader import df, pd
 from labels import factors
 import matplotlib.pyplot as plt
@@ -17,10 +21,18 @@ countries = ["US", "GB", "IN", "CA", "AU", "PH", "SG", "MY"]
 
 pd.set_option('display.max_rows', None)
 
-# Given a country return a list of averages
-# where each average is that country's average
-# score in that factor
 def country_avg(country):
+  """
+  Given a country return a list of averages
+  where each average is that country's average
+  score in that factor.
+
+  country: Which country to return the average of (str)
+
+  returns:
+  averages: An array where each element is that index's factor's average (array)
+  """
+
   # Get only the users of that country
   users = df[df["country"] == country]
 
@@ -60,8 +72,13 @@ def country_avg(country):
 
   return averages
 
-# Labels each bar with their average value
 def autolabel(bars, ax_idx):
+  """Labels each bar with their average value.
+  
+  bars: The bars graphed (plt.bar())
+  ax_idx: Which ax to label (int)
+  """
+
   for p in bars:
    height = round(p.get_height(), 3)
    ax[ax_idx].annotate('{}'.format(height),
@@ -70,27 +87,28 @@ def autolabel(bars, ax_idx):
       textcoords="offset points",
       ha='center', va='bottom')
 
-# 8 plots for the 8 countries
-fig, ax = plt.subplots(8)
+if __name__ == "__main__":
+  # 8 plots for the 8 countries
+  fig, ax = plt.subplots(8)
 
-x_labels = factors.keys()
-colors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "gray"]
+  x_labels = factors.keys()
+  colors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "gray"]
 
-all_scores = np.array([country_avg(country) for country in countries])
-# Max value in each factor
-max_val = all_scores.max(axis=0, keepdims=True)[0]
-# Min value in each factor
-min_val = all_scores.min(axis=0, keepdims=True)[0]
-diff = list(max_val - min_val)
-print({list(x_labels)[i]: diff[i] for i in range(16)})
+  all_scores = np.array([country_avg(country) for country in countries])
+  # Max value in each factor
+  max_val = all_scores.max(axis=0, keepdims=True)[0]
+  # Min value in each factor
+  min_val = all_scores.min(axis=0, keepdims=True)[0]
+  diff = list(max_val - min_val)
+  print({list(x_labels)[i]: diff[i] for i in range(16)})
 
-# Label the country
-for idx, country in enumerate(countries):
-  scores = all_scores[idx]
-  pps = ax[idx].bar(x_labels, scores, color = colors[idx])
-  ax[idx].set_xlabel(country)
-  autolabel(pps, idx)
+  # Label the country
+  for idx, country in enumerate(countries):
+    scores = all_scores[idx]
+    pps = ax[idx].bar(x_labels, scores, color = colors[idx])
+    ax[idx].set_xlabel(country)
+    autolabel(pps, idx)
 
 
-plt.subplots_adjust(hspace = 1)
-plt.show()
+  plt.subplots_adjust(hspace = 1)
+  plt.show()

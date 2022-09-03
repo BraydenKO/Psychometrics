@@ -1,3 +1,9 @@
+'''
+Used to either plot a normal distribution for one or 
+more factors or to find the factors with the greatest
+difference in standard deviation.
+'''
+
 from reader import df
 from labels import factors
 import matplotlib.pyplot as plt
@@ -9,22 +15,32 @@ from statistics import median
 # with frequency channel width of {width} 
 width = 5
 
-# Gets the frequency for scores in each channel
-# for a given gender and factor
 def frequency(df,gender,factor):
+  """
+  Gets the frequency for scores in each channel 
+  for a given gender and factor.
+  
+  df: pandas DataFrame
+  gender: Men are 1, women are 2 - that's how men and women are labeled in df
+  factor: Name of factor found in factors from labels.py
+
+  returns:
+  y_values: How often people scored in the associated frequency channel (array)
+  x_values: Frequency channels
+  """
   columns = factors[factor]
   x_values = range(width+(columns[1] - columns[0] + 1), width*(columns[1] - columns[0] + 1)+1, width)
   y_values = [0 for i in range(len(x_values))]
 
   # Gets the properly gendered users
   # And looks at the correct columns
-  df = df.iloc[:,columns[0]:columns[1]][df["gender"] == gender]
-  for col in df.columns:
-    df = df[df[col].isin([1,2,3,4,5])]
+  users = df.iloc[:,columns[0]:columns[1]][df["gender"] == gender]
+  for col in users.columns:
+    users = users[users[col].isin([1,2,3,4,5])]
 
-  for i in range(len(df)):
+  for i in range(len(users)):
     # for each user, get their summed score for this factor
-    score = sum(df.iloc[i])
+    score = sum(users.iloc[i])
     # find which channel to put them in
     for idx, val in enumerate(x_values):
       if score <= val:
@@ -33,13 +49,23 @@ def frequency(df,gender,factor):
 
   return y_values, x_values
 
-# Fits the data to a normal distribution and return
-# relevant data
 def fit(x, y):
-
+  """
+  Fits the data to a normal distributions and returns
+  relevant data.
+  
+  x: x values of each datapoint (array)
+  y: y values of each datapoint (array)
+  
+  returns:
+  q: x values for normal distribution (array)
+  p: y values for normal distribution (array)
+  mean: Mean of data (float)
+  std: Standard deviation of data (flaot)
+  """
   data = []
   # turns the data received from frequency()
-  # into a better format for calculation mean and std.
+  # into a better format for calculating mean and std.
   # i.e. x = [5,10] and y = [1,3] -> data = [5,10,10,10]
   for i in range(len(x)):
     data.extend([x[i] for j in range(int(y[i]))])
@@ -52,9 +78,16 @@ def fit(x, y):
   p = norm.pdf(q, mean, std)
   return q, p, mean, data, std
 
-# For drawing some lines, one might want
-# to find the vertical y value at the given x value
 def get_height(x,y,i):
+  """Returns how high the line is when the x coord is i
+  
+  x: x values of line (array)
+  y: y values of line (array)
+  i: value at which you want the height (float)
+
+  returns:
+  y[index]: height of line at the index's position
+  """
   try: # if it's a normal list
     index = x.index(i)
   except AttributeError: # if it's a numpy list and there aren't exact values
@@ -63,8 +96,14 @@ def get_height(x,y,i):
         index = idx
   return y[index]
 
-# Runs everything normally
 def run(factor):
+  """
+  For a given factor graph the frequency, normal distribution,
+  median, mean, and display/print standard devation and skew for
+  both men and women.
+
+  factor: Which factor to analyze (str)
+  """
   # makes sure the factor is first-letter capitalized
   factor = factor.title()
 
@@ -120,19 +159,25 @@ def run(factor):
 # (gender.py) will show the one with the greatest difference in mean
 
 def run_std_diff():
+  """
+  Does what run(factor) does but doesn't display the plots so that
+  it can quickly calculate the standard deviations and means to give 
+  you the factor with the greatest difference in standard deviation. 
+  If you want to find the greatest different in mean, use gender.py.
+  """
   std_diff = []
   std_dict = {}
 
   def run_2(factor):
     factor = factor.title()
 
-    women = frequency(df,2,factor)
+    women, x_values = frequency(df,2,factor)
     _, _, _, _, stdw = fit(x_values, women)
 
     area = sum([i*width for i in women])
     women = [i/area for i in women]
 
-    men = frequency(df,1,factor)
+    men, x_values = frequency(df,1,factor)
     _, _, _, _, stdm = fit(x_values, men)
     std_diff.append(abs(stdw-stdm))
     std_dict[abs(stdw-stdm)] = factor
@@ -146,7 +191,8 @@ def run_std_diff():
   
   print(f"{std_dict[max(std_diff)]} : {max(std_diff)}")
 
-for factor in factors:
- run(factor)
+if __name__ == "__main__":
+  for factor in factors:
+    run(factor)
 
-run("sensitivity")
+  run("sensitivity")
